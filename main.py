@@ -39,7 +39,7 @@ bullet2img = pygame.image.load('bullet.png')
 bullet2X = 0
 bullet2Y = 500
 bullet2X_change = 0
-bullet2Y_change = 7
+bullet2Y_change = 9
 bullet2_state = "ready"
 
 def fire_bullet(x,y):
@@ -48,10 +48,25 @@ def fire_bullet(x,y):
     screen.blit(bulletimg ,(x + 16 ,y + 10))
 
 
-def fire_bullet2(x,y):
-    global bullet2_state 
-    bullet2_state = "fire"
-    screen.blit(bulletimg ,(x + 16 ,y + 10))
+#def fire_bullet2(x,y):
+    #global bullet2_state 
+    #bullet2_state = "fire"
+    #screen.blit(bulletimg ,(x + 16 ,y + 10)) 
+    #above code kaam nahi kar raha for second bullet 
+
+#def isCollision2(enemyX , enemyY , bullet2X , bullet2Y ):
+    #distance = math.sqrt((math.pow((enemyX - bullet2X),2)) + (math.pow((enemyY - bullet2Y),2)))
+    #if distance < 27:
+       # return True
+    #else :
+       # return False (for second bullet baad meh koshish karna)
+        
+def isCollision(enemyX , enemyY , bulletX , bulletY ):
+    distance = math.sqrt((math.pow((enemyX - bulletX),2)) + (math.pow((enemyY - bulletY),2)))
+    if distance < 27:
+        return True
+    else :
+        return False 
 
 
 def player():
@@ -62,6 +77,8 @@ def player(x,y):
 
 def enemy(x,y):
     screen.blit(enemyimg,(enemyX, enemyY))   
+
+score = 0 
 
     
 
@@ -81,20 +98,20 @@ while running :
 
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_LEFT:
-                playerX_change = -3
+                playerX_change = -4
             if event.key == pygame.K_RIGHT:
-                playerX_change = +3 
+                playerX_change = +4 
             if event.key == pygame.K_SPACE:
-                if bullet2_state is "ready" :
-                    fire_bullet2(playerX,bullet2Y)
-
-                # bulletX = playerX (agar yeh kardenge toh bullet apna
-                #  path pe hi straight jayega aur spacehip ko follow nahi karega 
-                # kyunki pahle hi bulletX ka position fix ho jayega )
-                #LEKIN mujhe maza nahi aaya isiliye abhi yeh de-active hai 
-
                 if bullet_state is "ready" : #isse multiple space bar ka problem ruk jayega  
-                    fire_bullet(playerX,bulletY)
+                    bulletX = playerX #(agar yeh kardenge toh bullet apna  
+                    # path pe hi straight jayega aur spacehip ko follow nahi karega  
+                    # kyunki pahle hi bulletX ka position fix ho jayega )
+                    #LEKIN mujhe maza nahi aaya isiliye abhi yeh de-active hai 
+                    fire_bullet(bulletX,bulletY) 
+                
+                #if bulletY <= 300 :(for second bullet baad meh koshish karna)
+                    #if bullet2_state =="ready" :
+                       # fire_bullet2(playerX,bullet2Y)
 
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
@@ -125,13 +142,13 @@ while running :
          enemyY += enemyY_change
     
     #BULLLET MOVEMENT
-    if bullet_state is "fire" : 
-        fire_bullet(playerX,bulletY)
+    if bullet_state == "fire" : 
+        fire_bullet(bulletX,bulletY)
         bulletY -= bulletY_change
 
-    if bullet2_state is "fire"  :
-        fire_bullet2(playerX,bullet2Y)
-        bullet2Y -= bullet2Y_change
+    #if bullet2_state == "fire"  : (for second bullet baad meh koshish karna)
+     #   fire_bullet2(playerX,bullet2Y)
+      #  bullet2Y -= bullet2Y_change
     #Multipple bullet 
     # yaha pe bullet jab y- axis ka 1 pe pahuch jata hai
     # tab bullet wapas reset ho jata hai at bulletY i.e. 500 
@@ -141,9 +158,29 @@ while running :
         bulletY = 500 
         bullet_state = "ready" 
     
-   # if bullet2Y <= 1 :
+    #if bullet2Y <= 1 :(for second bullet baad meh koshish karna)
+       # bullet2Y = 500 
+        #bullet2_state = "ready"
+
+    collision = isCollision(enemyX , enemyY , bulletX , bulletY)
+    if collision :
+        bulletY = 500 
+        bullet_state = "ready"
+        score += 1
+        print(score)
+        enemyX = random.randint(0,936)
+        enemyY = random.randint(50,300)
+
+   # collision2 = isCollision2(enemyX , enemyY , bullet2X , bullet2Y)
+    #if collision2 :
        # bullet2Y = 500 
        # bullet2_state = "ready"
+        #score += 1
+        #print(score)
+        #enemyX = random.randint(0,936)
+        #enemyY = random.randint(50,300)
+
+
 
     player(playerX,playerY)
     enemy(enemyX,enemyY)
