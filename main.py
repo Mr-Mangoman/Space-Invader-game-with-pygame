@@ -89,13 +89,21 @@ def enemy(x,y,i):
 score_value = 0
 font = pygame.font.Font("freesansbold.ttf" , 32 )
 
+font2 = pygame.font.Font("freesansbold.ttf" , 32 )
+
 textX = 10
 textY = 10 
+
+text2X = 300
+text2Y = 10 
 
 def show_score(x,y):
     score = font.render("Score : " + str(score_value), True ,(255,255,255))
     screen.blit(score , (x,y))
     
+def thank_you(x,y):
+    score = font2.render("THANK YOU FOR PLAYING ", True ,(255,255,255))
+    screen.blit(score , (x,y))
 
 #game loop
 running = True
@@ -199,6 +207,10 @@ while running :
         #print(score)
         #enemyX = random.randint(0,936)
         #enemyY = random.randint(50,300)
+
+
+    if score_value >= 10:
+        thank_you(text2X,text2Y) 
 
 
 
